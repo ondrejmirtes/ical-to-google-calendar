@@ -58,8 +58,6 @@ for my $year (keys %{ $ical->{events} }) {
 # Right, we can now walk through each event in $events
 for my $event_uid (keys %ical_events) {
     my $event = $ical_events{$event_uid};
-    printf "$event_uid (%s at %s)\n",
-        @$event{ qw (SUMMARY LOCATION) };
 }
 
 
@@ -127,7 +125,6 @@ for my $ical_uid (keys %ical_events) {
     if (scalar(@gcal_events) > 0) {
         $gcal_event = @gcal_events[0];
         $method = 'update_entry';
-        print "Need to update ical event $ical_uid in gcal\n";
     } else {
         $gcal_event = Net::Google::Calendar::Entry->new;
         $method = 'add_entry';
