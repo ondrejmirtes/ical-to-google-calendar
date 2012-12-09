@@ -121,10 +121,11 @@ for my $event ($gcal->get_events) {
 # events
 for my $ical_uid (keys %ical_events) {
     
-    my ($method, $gcal_event);
+    my ($method, $gcal_event, @gcal_events);
+    @gcal_events = $gcal->get_events(q => "\"[ical_imported_uid:$ical_uid]\"");
 
-    if (exists $gcal_events{$ical_uid}) {
-        $gcal_event = $gcal_events{$ical_uid};
+    if (scalar(@gcal_events) > 0) {
+        $gcal_event = @gcal_events[0];
         $method = 'update_entry';
         print "Need to update ical event $ical_uid in gcal\n";
     } else {
@@ -145,6 +146,3 @@ for my $ical_uid (keys %ical_events) {
     $gcal->$method($gcal_event)
         or warn "Failed to $method for $ical_uid";
 }
-
-
-
