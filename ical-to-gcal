@@ -29,8 +29,14 @@ if (!$calendar) {
     die "You must specify the calendar name (--calendar=...)";
 }
 
-my $ical_data = LWP::Simple::get($ical_url)
-    or die "Failed to fetch $ical_url";
+my $ua = LWP::UserAgent->new();
+my $response = $ua->get($ical_url);
+my $ical_data = '';
+if ($response->is_success) {
+    $ical_data = $response->decoded_content;
+} else {
+    die "Failed to fetch calendar, error:" . $response->status_line;
+}
 
 my $ic = iCal::Parser->new;
 
